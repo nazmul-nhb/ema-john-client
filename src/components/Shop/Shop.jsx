@@ -8,7 +8,7 @@ import { Link, useLoaderData } from 'react-router-dom';
 const Shop = () => {
     const [products, setProducts] = useState([]);
     const [cart, setCart] = useState([]);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [itemsPerPage, setItemsPerPage] = useState(12);
     const [currentPage, setCurrentPage] = useState(1);
     const { count } = useLoaderData();
     // const itemsPerPage = 12;
@@ -24,10 +24,10 @@ const Shop = () => {
     console.log(pages);
 
     useEffect(() => {
-        fetch('http://localhost:5000/products')
+        fetch(`http://localhost:5000/products?page=${currentPage - 1}&size=${itemsPerPage}`)
             .then(res => res.json())
             .then(data => setProducts(data))
-    }, []);
+    }, [currentPage, itemsPerPage]);
 
     useEffect(() => {
         const storedCart = getShoppingCart();
@@ -118,7 +118,7 @@ const Shop = () => {
                 }
                 {
                     pages.map(page => <button
-                        className={currentPage === page + 1 && 'selected'}
+                        className={currentPage === page + 1 ? 'selected' : ''}
                         onClick={() => setCurrentPage(page + 1)}
                         key={page}
                     >{page + 1}</button>)
